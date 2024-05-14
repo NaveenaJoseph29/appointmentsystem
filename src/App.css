@@ -1,0 +1,70 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+table, th, td {
+  background-color: black;
+  color: aqua;
+  border: 1px solid;
+  padding: 10px;
+  margin: 20px;
+}
+
+table{
+  width:100%;
+}
+.details_main_container{
+  background-color: aliceblue;
+}
+.details_sub_container{
+  background-color: cornsilk;
+  margin-top: 5%;
+  width: 80%;
+  margin: auto;
+  padding: 70px 0;
+}
+.mainContainer{
+  height: 1vh;
+}
+.appointmentContainer{
+  background-color: antiquewhite;
+  margin: 10%;
+  padding: 20px;
+}
+.AppointmentSubContainer{
+  display: grid;
+grid-template-columns: 50% 50%;
+margin: 5%;
+}
+.buttonDiv{
+  margin: 10px;
+  padding: auto;
+  margin-right:10px !important;
+}
+.button{
+  margin-right: 10px;
+}
+.formStyle{
+  padding: 10px;
+}
+.subContainer{
+  display: grid;
+  grid-template-columns: 25% 25% 25% 25%;
+}
+.card{
+  background-color: rgb(35, 33, 53);
+  border-radius: 10px;
+  box-shadow: black;
+  height: auto;
+  width: auto;
+}
