@@ -16,7 +16,7 @@ stripe.api_key =  "sk_test_51PFzEcSHs424eprLkiUN5DLZdf2dFfNuv01ZJGT6mewfle6CmUhD
 app = FastAPI()
 
 origins = [
-    "http://localhost:3000",
+    "http://localhost:3000","http://ec2-13-53-128-229.eu-north-1.compute.amazonaws.com"
 ]
 app.add_middleware(
     CORSMiddleware,
@@ -27,7 +27,7 @@ app.add_middleware(
 )
 
 
-DATABASE_URL = "mysql+pymysql://root:Ryantrevor1@@localhost/patient_db"
+DATABASE_URL = "mysql+pymysql://root:@localhost/patient_db"
 database = Database(DATABASE_URL)
 engine = create_engine(DATABASE_URL)
 Base = declarative_base()
