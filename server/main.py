@@ -13,36 +13,31 @@ from fastapi.responses import JSONResponse
 
 stripe.api_key =  "sk_test_51PFzEcSHs424eprLkiUN5DLZdf2dFfNuv01ZJGT6mewfle6CmUhDCKxBfjeh4Mofh1c5WTgljkA5Xv3K5roi57Nw00Pm312EBO"
 
-app = FastAPI()
+app = FastAPI(docs_url='/docs',
+            redoc_url='/redoc',
+            openapi_url='/openapi.json',
+            root_path='/api')
 
 origins = [
-    "http://localhost:3000","http://ec2-13-53-128-229.eu-north-1.compute.amazonaws.com"
+    "http://localhost:5173",
+    "http://localhost:3000",
+    "http://ec2-13-53-128-229.eu-north-1.compute.amazonaws.com"
 ]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 
-DATABASE_URL = "mysql+pymysql://root:@localhost/patient_db"
+DATABASE_URL = "mysql+pymysql://root:Ryantrevor1@@localhost/patient_db"
 database = Database(DATABASE_URL)
 engine = create_engine(DATABASE_URL)
 Base = declarative_base()
 # stripe.api_key = "your_stripe_api_key"
-origins = [
-    "http://localhost:5173",
-]
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 
 class Patient(BaseModel):
