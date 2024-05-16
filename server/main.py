@@ -10,15 +10,28 @@ from fastapi.middleware.cors import CORSMiddleware
 import stripe
 from fastapi.responses import JSONResponse
 
+
 stripe.api_key =  "sk_test_51PFzEcSHs424eprLkiUN5DLZdf2dFfNuv01ZJGT6mewfle6CmUhDCKxBfjeh4Mofh1c5WTgljkA5Xv3K5roi57Nw00Pm312EBO"
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:3000",
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 DATABASE_URL = "mysql+pymysql://root:@localhost/patient_db"
 database = Database(DATABASE_URL)
 engine = create_engine(DATABASE_URL)
 Base = declarative_base()
-stripe.api_key = "your_stripe_api_key"
+# stripe.api_key = "your_stripe_api_key"
 origins = [
     "http://localhost:5173",
 ]
@@ -145,10 +158,10 @@ async def update_patient(patient_id: int, patient: Patient):
 
 
 
-@app.get("/appointment/{id}", response_model=Appointment)
-async def get_appointment(id: int):
-    query = "SELECT * FROM appointment WHERE id = :id"
-    result = await database.fetch_one(query=query, values={"id": id})
+@app.get("/appointment/{patient_id}", response_model=List[Appointment])
+async def get_appointment(patient_id: int):
+    query = "SELECT * FROM appointment WHERE patient_id = :patient_id"
+    result = await database.fetch_all(query=query, values={"patient_id": patient_id})
     if not result:
         raise HTTPException(status_code=404, detail="Appointment not found")
     return result
@@ -195,6 +208,34 @@ async def process_payment(amount: int, currency: str, token: str):
         )
 
         return {"status": "success", "charge_id": charge.id}
+
+    except stripe.error.CardError as e:
+        return {"status": "error", "message": str(e)}
+    except stripe.error.StripeError as e:
+        return {"status": "error", "message": "Something went wrong. Please try again later."}
+    
+
+@app.post("/create_payment_intent/")
+async def create_payment_intent():
+    try:
+        intent = stripe.PaymentIntent.create(
+            amount=1000,  # amount in cents
+            currency='usd',
+            payment_method_types=['card'],
+            description='Payment for XYZ',
+            shipping={
+                "name": "Jenny Rosen",
+                "address": {
+                "line1": "510 Townsend St",
+                "postal_code": "98140",
+                "city": "San Francisco",
+                "state": "CA",
+                "country": "US",
+                },
+            },
+        )
+        client_secret = intent.client_secret
+        return {"status": "success", "client_secret": client_secret}
 
     except stripe.error.CardError as e:
         return {"status": "error", "message": str(e)}
