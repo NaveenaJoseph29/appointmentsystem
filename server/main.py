@@ -27,7 +27,7 @@ app.add_middleware(
 )
 
 
-DATABASE_URL = "mysql+pymysql://root:@localhost/patient_db"
+DATABASE_URL = "mysql+pymysql://root:Ryantrevor1@@localhost/patient_db"
 database = Database(DATABASE_URL)
 engine = create_engine(DATABASE_URL)
 Base = declarative_base()
